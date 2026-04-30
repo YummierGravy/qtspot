@@ -9,10 +9,6 @@
   </p>
 </div>
 
-<img width="1917" height="1079" alt="image" src="https://github.com/user-attachments/assets/82fb24a9-62fd-4475-b59e-6804d3532e1a" />
-
-<img width="1922" height="1080" alt="image" src="https://github.com/user-attachments/assets/f993a6c5-9d96-48d4-a0ba-2e05d0bf2ec3" />
-
 
 ## Maintainer and lineage
 - qtspot is maintained by Cian Estella / YummierGravy.

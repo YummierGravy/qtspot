@@ -1,59 +1,62 @@
 #!/bin/bash
 set -euo pipefail
 
-# Check for required tools
 command -v rsvg-convert >/dev/null 2>&1 || {
 	echo >&2 "rsvg-convert is required but not installed. Aborting."
 	exit 1
 }
-command -v iconutil >/dev/null 2>&1 || {
-	echo >&2 "iconutil is required but not installed. Aborting."
-	exit 1
-}
-command -v pngquant >/dev/null 2>&1 || {
-	echo >&2 "pngquant is required but not installed. Aborting."
-	exit 1
-}
-command -v optipng >/dev/null 2>&1 || {
-	echo >&2 "optipng is required but not installed. Aborting."
-	exit 1
+
+has_command() {
+	command -v "$1" >/dev/null 2>&1
 }
 
 # Temp folder
 ICON_DIR="icons"
+rm -rf "$ICON_DIR"
 mkdir -p "$ICON_DIR"
 
 # Generate PNG icons from SVG
 SIZES=(16 32 64 128 256 512)
 for size in "${SIZES[@]}"; do
-	rsvg-convert -w $size -h $size assets/logo.svg -o "$ICON_DIR/logo_${size}.png"
+	outfile="assets/logo_${size}.png"
+	rsvg-convert -w "$size" -h "$size" assets/logo.svg -o "$outfile"
 
-	# Apply lossy compression with pngquant
-	pngquant --force --quality=60-80 "$ICON_DIR/logo_${size}.png" --output "$ICON_DIR/logo_${size}.png"
-
-	# Further optimize with optipng
-	optipng -quiet -o5 "$ICON_DIR/logo_${size}.png"
-
-	# For smaller sizes, reduce color depth
-	if [ $size -le 32 ]; then
-		magick "$ICON_DIR/logo_${size}.png" -colors 256 PNG8:"$ICON_DIR/logo_${size}.png"
+	if has_command pngquant; then
+		pngquant --force --quality=60-80 "$outfile" --output "$outfile"
+	else
+		echo "Skipping pngquant optimization for $outfile; pngquant is not installed."
 	fi
+
+	if has_command optipng; then
+		optipng -quiet -o5 "$outfile"
+	else
+		echo "Skipping optipng optimization for $outfile; optipng is not installed."
+	fi
+
+	if [ "$size" -le 32 ] && has_command magick; then
+		magick "$outfile" -colors 256 PNG8:"$outfile"
+	fi
+
+	cp "$outfile" "$ICON_DIR/logo_${size}.png"
 done
 
-# Generate ICNS for macOS
-ICONSET_DIR="$ICON_DIR/qtspot.iconset"
-mkdir -p "$ICONSET_DIR"
-for size in "${SIZES[@]}"; do
-	cp "$ICON_DIR/logo_${size}.png" "$ICONSET_DIR/icon_${size}x${size}.png"
-	if [ $size -ne 16 ] && [ $size -ne 32 ]; then
-		cp "$ICON_DIR/logo_${size}.png" "$ICONSET_DIR/icon_$((size / 2))x$((size / 2))@2x.png"
-	fi
-done
+if has_command iconutil; then
+	ICONSET_DIR="$ICON_DIR/qtspot.iconset"
+	mkdir -p "$ICONSET_DIR"
+	for size in "${SIZES[@]}"; do
+		cp "$ICON_DIR/logo_${size}.png" "$ICONSET_DIR/icon_${size}x${size}.png"
+		if [ "$size" -ne 16 ] && [ "$size" -ne 32 ]; then
+			cp "$ICON_DIR/logo_${size}.png" "$ICONSET_DIR/icon_$((size / 2))x$((size / 2))@2x.png"
+		fi
+	done
 
-# Create ICNS file
-iconutil -c icns "$ICONSET_DIR" -o assets/logo.icns
+	iconutil -c icns "$ICONSET_DIR" -o assets/logo.icns
+	echo "ICNS file size: $(du -h assets/logo.icns | cut -f1)"
+else
+	echo "Skipping macOS ICNS generation; iconutil is not installed."
+fi
 
 # Cleanup
 rm -r "$ICON_DIR"
 
-echo "Icon generation complete. ICNS file size: $(du -h assets/logo.icns | cut -f1)"
+echo "Icon generation complete."
