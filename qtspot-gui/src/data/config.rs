@@ -152,7 +152,7 @@ impl Authentication {
     }
 }
 
-const APP_NAME: &str = "Spotix";
+const APP_NAME: &str = "qtspot";
 const CONFIG_FILENAME: &str = "config.json";
 const PROXY_ENV_VAR: &str = "SOCKS_PROXY";
 

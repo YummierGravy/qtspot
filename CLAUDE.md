@@ -12,11 +12,8 @@ cargo build
 cargo build --release
 
 # Run the GUI app
-cargo run -p spotix-gui --bin spotix
-cargo run -p spotix-gui --bin spotix --release
-
-# Run the CLI example
-cargo run --bin spotix-cli
+cargo run -p qtspot-gui --bin qtspot
+cargo run -p qtspot-gui --bin qtspot --release
 
 # Check code style (matches CI)
 cargo clippy -- -D warnings
@@ -46,7 +43,9 @@ Install Qt 6 development tools (`qmake6`, Qt Quick, Qt Quick Controls 2, Qt Netw
 
 ## Architecture
 
-Spotix is a native Spotify client (fork of psst) organized as a Rust workspace with three crates:
+qtspot is a native Spotify client organized as a Rust workspace. It is maintained by Cian Estella / YummierGravy.
+
+The core crate still uses `spotix-core`; GUI branding and packaging use `qtspot`.
 
 ### spotix-core
 Core library handling Spotify connectivity and audio:
@@ -56,14 +55,11 @@ Core library handling Spotify connectivity and audio:
 - `connection/` - Low-level Spotify protocol connection (Shannon encryption)
 - `cache.rs`, `cdn.rs` - Track caching and CDN file fetching
 
-### spotix-gui
+### qtspot-gui
 Qt 6/QML GUI application:
 - `data/` - Application state models and configuration (`config.rs` for user preferences)
 - `webapi/` - Spotify Web API client
-- `src/bin/spotix.rs`, `src/bin/spotix-qt.rs`, `src/qt/`, `qml/` - Qt 6/QML primary UI using CXX-Qt
-
-### spotix-cli
-Minimal CLI player for testing core functionality.
+- `src/bin/spotix.rs`, `src/bin/spotix-qt.rs`, `src/qt/`, `qml/` - Qt 6/QML primary UI using CXX-Qt; Cargo exposes the main binary as `qtspot`.
 
 ## Audio Backend Features
 
@@ -73,4 +69,4 @@ Minimal CLI player for testing core functionality.
 
 ## Theming
 
-Custom themes are TOML files in `~/.config/Spotix/themes/`. Each theme defines color keys and a `name` field. Theme selection is in Settings -> General.
+Custom themes are TOML files in `~/.config/qtspot/themes/`. Each theme defines color keys and a `name` field. Theme selection is in Settings -> General.

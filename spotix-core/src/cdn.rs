@@ -216,7 +216,7 @@ impl Cdn {
             _ => "Linux",
         };
         format!(
-            "Spotify/{} {}/0 (spotix/{})",
+            "Spotify/{} {}/0 (qtspot/{})",
             SPOTIFY_SEMANTIC_VERSION,
             platform,
             env!("CARGO_PKG_VERSION")

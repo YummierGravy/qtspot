@@ -5,5 +5,5 @@ ingredients:
   debs:
     - ../*.deb
   script:
-    - mkdir -p /home/runner/work/spotix/spotix/.AppDir/
-    - cp /home/runner/work/spotix/spotix/spotix-gui/assets/logo_256.png /home/runner/work/spotix/spotix/.AppDir/spotix.png
+    - mkdir -p /home/runner/work/qtspot/qtspot/.AppDir/
+    - cp /home/runner/work/qtspot/qtspot/qtspot-gui/assets/logo_256.png /home/runner/work/qtspot/qtspot/.AppDir/qtspot.png

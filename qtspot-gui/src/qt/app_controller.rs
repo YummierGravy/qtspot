@@ -46,7 +46,7 @@ impl Default for StartupState {
     fn default() -> Self {
         Self {
             authenticated: false,
-            status: "Starting Spotix".to_string(),
+            status: "Starting qtspot".to_string(),
             route: "login".to_string(),
             session_configured: false,
         }
@@ -1136,7 +1136,7 @@ impl qobject::SpotixApp {
                 return;
             }
             "account:clear-cache" => {
-                match clear_spotix_cache() {
+                match clear_qtspot_cache() {
                     Ok(message) => {
                         self.as_mut().set_detail_status(QString::from(&message));
                         self.as_mut()
@@ -1941,7 +1941,7 @@ fn error_rows(error: &str) -> Vec<QtDetailRow> {
     )]
 }
 
-fn clear_spotix_cache() -> Result<String, String> {
+fn clear_qtspot_cache() -> Result<String, String> {
     let cache_dir = Config::cache_dir().ok_or_else(|| "No cache directory found".to_string())?;
     if !cache_dir.exists() {
         return Ok("Cache is already empty".to_string());
@@ -2115,7 +2115,7 @@ fn ascii_art_placeholder() -> &'static str {
    ........=+++=:................:=+++=........   \n\
    ......:+++=......................=+++:......   \n\
    .....=+++.........:------:.........+++=.....   \n\
-   ....=++=........./  SPOTIX \\........=++=....   \n\
+   ....=++=........./  QTSPOT \\........=++=....   \n\
    ...:+++:.........\\  MUSIC  /........:+++:...   \n\
    ...=++=...........:------:..........=++=...   \n\
    ...=++=.............................=++=...   \n\

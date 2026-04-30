@@ -415,7 +415,7 @@ fn client_response_encrypted(credentials: Credentials) -> ShannonMsg {
         }),
         system_info: MessageField::some(SystemInfo {
             device_id: Some(device_id()),
-            system_information_string: Some("librespot_but_actually_spotix".to_string()),
+            system_information_string: Some("librespot_but_actually_qtspot".to_string()),
             os: Some(Os::default().into()),
             cpu_family: Some(CpuFamily::default().into()),
             ..SystemInfo::default()

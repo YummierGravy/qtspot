@@ -4,7 +4,7 @@ pub const OS: &str = std::env::consts::OS;
 /// Device ID used for authentication procedures.
 /// librespot opts for UUIDv4s instead.
 pub fn device_id() -> String {
-    std::env::var("SPOTIX_DEVICE_ID").unwrap_or_else(|_| "Spotix".to_string())
+    std::env::var("QTSPOT_DEVICE_ID").unwrap_or_else(|_| "qtspot".to_string())
 }
 
 /// Client ID for desktop keymaster client

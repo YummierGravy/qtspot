@@ -41,7 +41,7 @@ for size in "${SIZES[@]}"; do
 done
 
 # Generate ICNS for macOS
-ICONSET_DIR="$ICON_DIR/spotix.iconset"
+ICONSET_DIR="$ICON_DIR/qtspot.iconset"
 mkdir -p "$ICONSET_DIR"
 for size in "${SIZES[@]}"; do
 	cp "$ICON_DIR/logo_${size}.png" "$ICONSET_DIR/icon_${size}x${size}.png"

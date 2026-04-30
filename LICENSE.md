@@ -1,6 +1,8 @@
 MIT License
 
-Copyright (c) 2025 skyline69
+Copyright (c) 2026 Cian Estella / YummierGravy
+Copyright (c) 2025 skyline69 (spotix)
+Copyright (c) psst and upstream contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

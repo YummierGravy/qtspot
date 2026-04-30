@@ -64,7 +64,7 @@ impl Stream {
         let backend_name = env::var("CUBEB_BACKEND")
             .ok()
             .and_then(|s| CString::new(s).ok());
-        let ctx_name = CString::new("Spotix").ok();
+        let ctx_name = CString::new("qtspot").ok();
         let ctx = cubeb::Context::init(ctx_name.as_deref(), backend_name.as_deref())?;
 
         let mut callback = StreamCallback {
@@ -83,7 +83,7 @@ impl Stream {
 
         let mut builder = cubeb::StreamBuilder::new();
         builder
-            .name("Spotix")
+            .name("qtspot")
             .default_output(&params)
             .latency(STREAM_LATENCY)
             .data_callback(move |_, output| {

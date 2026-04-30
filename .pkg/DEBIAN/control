@@ -1,10 +1,10 @@
-Package: spotix-gui
+Package: qtspot
 Version: $VERSION
 Architecture: $ARCHITECTURE
-Maintainer: skyline69
+Maintainer: Cian Estella / YummierGravy
 Section: sound
 Priority: optional
-Homepage: https://github.com/skyline69/spotix
+Homepage: https://github.com/YummierGravy/qtspot
 Package-Type: deb
 Depends: libssl3 | libssl1.1
 Description: Fast and native Spotify client

@@ -1,12 +1,12 @@
 [Desktop Entry]
 Type=Application
-Name=Spotix
+Name=qtspot
 Comment=Fast and native Spotify client
 GenericName=Music Player
-Icon=spotix
-TryExec=spotix
-Exec=spotix %U
+Icon=qtspot
+TryExec=qtspot
+Exec=qtspot %U
 Terminal=false
-MimeType=x-scheme-handler/spotix;
+MimeType=x-scheme-handler/qtspot;
 Categories=Audio;Music;Player;AudioVideo;
-StartupWMClass=spotix
+StartupWMClass=qtspot

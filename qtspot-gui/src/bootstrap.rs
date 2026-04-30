@@ -6,8 +6,8 @@ use spotix_core::{
 
 use crate::{data::Config, webapi::WebApi};
 
-pub const ENV_LOG: &str = "SPOTIX_LOG";
-pub const ENV_LOG_STYLE: &str = "SPOTIX_LOG_STYLE";
+pub const ENV_LOG: &str = "QTSPOT_LOG";
+pub const ENV_LOG_STYLE: &str = "QTSPOT_LOG_STYLE";
 
 pub fn init_logging() {
     Builder::from_env(
@@ -22,7 +22,7 @@ pub fn load_config() -> Config {
     let mut config = Config::load().unwrap_or_default();
     let device_id = config.ensure_device_id();
     unsafe {
-        std::env::set_var("SPOTIX_DEVICE_ID", &device_id);
+        std::env::set_var("QTSPOT_DEVICE_ID", &device_id);
     }
     if config.device_id.as_deref() != Some(&device_id) {
         config.save();

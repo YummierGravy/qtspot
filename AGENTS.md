@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Purpose
-This file is for coding agents working in `/Users/skyline/Programming/spotix`.
+This file is for coding agents working in the qtspot repository.
 It summarizes the commands, repository layout, and coding conventions that are most useful when making safe changes here.
 
 ## Repo-Specific Rule Files
@@ -13,9 +13,10 @@ It summarizes the commands, repository layout, and coding conventions that are m
 
 ## Repository Layout
 - Root `Cargo.toml` is a virtual workspace manifest.
-- Workspace members are `spotix-core` and `spotix-gui`.
+- Workspace members are `spotix-core` and `qtspot-gui`.
 - `spotix-core` contains Spotify session, connection, cache, audio, metadata, and player logic.
-- `spotix-gui` contains the Qt/QML desktop app and the `spotix` binary.
+- `qtspot-gui` contains the Qt/QML desktop app and the `qtspot` binary.
+- The core crate still uses `spotix-core`; GUI branding and packaging use `qtspot`.
 - Intentional patch/vendor crates live beside the workspace: `rspotify-model-patch`, `librespot-playback-patch`, and `vendor/wrapped-vec`.
 - Do not edit patch/vendor crates unless the change truly belongs upstream or in the patched dependency itself.
 - Patch/vendor crates are not normal workspace members; use `--manifest-path` when building or testing them directly.
@@ -31,25 +32,25 @@ It summarizes the commands, repository layout, and coding conventions that are m
  - Install Qt 6 development tools, including `qmake6`, Qt Quick, Qt Quick Controls 2, Qt Network, CMake, a C++ compiler, and `clang-format`.
  - If both Qt 5 and Qt 6 are installed, set `QMAKE=/path/to/qmake6` or `QT_VERSION_MAJOR=6` before building the Qt scaffold.
 - Cross-compilation for Linux uses `Cross.toml` and installs OpenSSL/ALSA dev packages in the image.
-- macOS bundling is done from `spotix-gui/` with `cargo-bundle`.
+- macOS bundling is done from `qtspot-gui/` with `cargo-bundle`.
 
 ## Canonical Build Commands
 Run these from the repository root unless noted otherwise.
 - Build the whole workspace: `cargo build`
 - Build release artifacts: `cargo build --release`
 - Build only the core crate: `cargo build -p spotix-core`
-- Build only the GUI crate: `cargo build -p spotix-gui`
-- Build the GUI with the alternate audio backend: `cargo build -p spotix-gui --no-default-features --features cubeb`
-- Build the Qt 6/QML GUI: `cargo build -p spotix-gui --bin spotix`
-- Run the Qt 6/QML GUI: `cargo run -p spotix-gui --bin spotix`
-- Run the GUI app in release mode: `cargo run -p spotix-gui --release --bin spotix`
-- Install the app locally from source: `cargo install --locked --path spotix-gui`
-- Build the macOS bundle from `spotix-gui/`: `cargo bundle --release`
+- Build only the GUI crate: `cargo build -p qtspot-gui`
+- Build the GUI with the alternate audio backend: `cargo build -p qtspot-gui --no-default-features --features cubeb`
+- Build the Qt 6/QML GUI: `cargo build -p qtspot-gui --bin qtspot`
+- Run the Qt 6/QML GUI: `cargo run -p qtspot-gui --bin qtspot`
+- Run the GUI app in release mode: `cargo run -p qtspot-gui --release --bin qtspot`
+- Install the app locally from source: `cargo install --locked --path qtspot-gui`
+- Build the macOS bundle from `qtspot-gui/`: `cargo bundle --release`
 
 ## Lint and Formatting Commands
 - Canonical lint gate used in CI: `cargo clippy -- -D warnings`
 - Lint one workspace crate: `cargo clippy -p spotix-core -- -D warnings`
-- Lint the GUI crate only: `cargo clippy -p spotix-gui -- -D warnings`
+- Lint the GUI crate only: `cargo clippy -p qtspot-gui -- -D warnings`
 - Format the workspace: `cargo fmt --all`
 - Check formatting without writing files: `cargo fmt --all --check`
 - There is no separate `cargo lint` wrapper; use `clippy` directly.
@@ -57,7 +58,7 @@ Run these from the repository root unless noted otherwise.
 ## Test Commands
 - Run all workspace tests: `cargo test --workspace`
 - Run tests for one workspace crate: `cargo test -p spotix-core`
-- Run tests for the GUI crate only: `cargo test -p spotix-gui`
+- Run tests for the GUI crate only: `cargo test -p qtspot-gui`
 - List discovered tests before filtering: `cargo test -p spotix-core -- --list`
 - Build tests without running them: `cargo test --workspace --no-run`
 
@@ -77,7 +78,7 @@ Because these crates are outside the workspace, address them explicitly.
 
 ### Current Testing Reality
 - Most concrete tests currently live in patch/vendor crates.
-- `spotix-core` and `spotix-gui` currently rely more on `cargo build` and `cargo clippy` than on broad first-party test coverage.
+- `spotix-core` and `qtspot-gui` currently rely more on `cargo build` and `cargo clippy` than on broad first-party test coverage.
 - When touching workspace code, at minimum run the narrowest relevant build or clippy command even if no direct test target exists.
 
 ## Release and Packaging Commands
@@ -85,7 +86,7 @@ Because these crates are outside the workspace, address them explicitly.
 - Cross-build Linux ARM64 release binaries: `cross build --release --target aarch64-unknown-linux-gnu`
 - Add Apple targets when building universal macOS releases: `rustup target add x86_64-apple-darwin aarch64-apple-darwin`
 - Build both macOS targets: `cargo build --release --target x86_64-apple-darwin --target aarch64-apple-darwin`
-- Build the macOS app bundle from `spotix-gui/` after installing `cargo-bundle`.
+- Build the macOS app bundle from `qtspot-gui/` after installing `cargo-bundle`.
 
 ## Code Style: Formatting and Structure
 - Follow `cargo fmt`; do not hand-format against rustfmt output.
@@ -134,7 +135,7 @@ Because these crates are outside the workspace, address them explicitly.
 
 ## Practical Guidance for Agents
 - Start with the smallest possible change in the correct crate.
-- Check whether a change belongs in workspace code or in a patched dependency before editing files outside `spotix-core` or `spotix-gui`.
+- Check whether a change belongs in workspace code or in a patched dependency before editing files outside `spotix-core` or `qtspot-gui`.
 - Preserve platform support; avoid Linux-only or macOS-only assumptions unless the code is already gated by `cfg`.
 - If you touch audio, session, playback, or cache code, prefer validating with both `cargo build` and a targeted `cargo clippy` run.
 - If you touch GUI state types, watch serialization derives so state remains cloneable, comparable, and storable.

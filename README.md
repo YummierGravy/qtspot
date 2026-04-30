@@ -1,11 +1,11 @@
 <div align="center">
-  <img src="assets/logo.svg" alt="Spotix logo" width="96" height="96" />
-  <h1>Spotix</h1>
+  <img src="assets/logo.svg" alt="qtspot logo" width="96" height="96" />
+  <h1>qtspot</h1>
   <p>Fast, native Spotify client written in Rust — low overhead, clean UI, lightweight runtime (no Electron).</p>
   <p>
-    <a href="https://github.com/skyline69/spotix/releases/latest">Latest Release</a>
+    <a href="https://github.com/YummierGravy/qtspot/releases/latest">Latest Release</a>
     •
-    <a href="https://github.com/skyline69/spotix/issues">Issues</a>
+    <a href="https://github.com/YummierGravy/qtspot/issues">Issues</a>
   </p>
 </div>
 
@@ -14,39 +14,29 @@
 <img width="1922" height="1080" alt="image" src="https://github.com/user-attachments/assets/f993a6c5-9d96-48d4-a0ba-2e05d0bf2ec3" />
 
 
-## Fork notice
-- This project is a fork of https://github.com/jpochyla/psst
-- The fork is maintained by skyline69 and diverges in naming, packaging, and ongoing changes
+## Maintainer and lineage
+- qtspot is maintained by Cian Estella / YummierGravy.
+- This project is a hard fork of earlier MIT-licensed Spotify client work, including the previous Spotix fork and the original psst project.
+- The fork now follows its own product, packaging, UI, and maintenance direction.
 
-## Additional features over upstream psst
-- Theme support with TOML themes (including custom colors and lyric highlighting)
-- Spotify-style default dark theme with bundled Spotify Mix fonts
-- Configurable cache size limit and cache usage display in preferences
-- Playlist pagination toggle and real-time library search (playlists, albums, tracks, podcasts, albums)
-- Saved playback state restoration (resume last track/position) and improved lyrics view (highlight, focus, auto-scroll)
-- More fluid seek bar, bottom-bar cover click opens album, and platform release binaries
-- More up-to-date dependencies and ongoing maintenance on the fork
-- Automatic retry for transient network timeouts and throttling
-- Built-in 10-band equalizer with presets and custom tuning
-- Multi-select playlist mode with select all and bulk remove actions
+## Features
+- Qt 6/QML desktop interface with a compact, terminal-inspired layout.
+- Spotify OAuth login, library browsing, saved tracks/albums/shows, playlists, and search.
+- Native playback with queue controls, shuffle, seeking, volume, crossfade, autoplay, and saved playback restore.
+- Built-in 10-band equalizer, presets, mono output, and normalization controls.
+- Local audio cache with configurable size limits and cache usage controls.
+- TOML themes, bundled theme presets, Spotify Mix fonts, and configurable lyrics styling.
+- Playlist pagination, multi-select playlist editing, bulk remove, and select-all actions.
+- Automatic retry handling for transient Spotify network timeouts and throttling.
 
 ## Status
 - Early development; expect missing features and rough edges
 - Requires a Spotify Premium account
+- Vaidating against Linux/ Arch but should build on MacOS/ Win . More to come on that later
 
 ## Download
 
-GitHub Actions build and publish releases when changes land on `main`.
-Grab the latest installers from the [Releases page](https://github.com/skyline69/spotix/releases/latest).
-
-| Platform               | Download Link                                                                               |
-| ---------------------- | ------------------------------------------------------------------------------------------- |
-| Linux (x86_64)         | [Download](https://github.com/skyline69/spotix/releases/latest/download/spotix-linux-x86_64)  |
-| Linux (aarch64)        | [Download](https://github.com/skyline69/spotix/releases/latest/download/spotix-linux-aarch64)|
-| Debian Package (amd64) | [Download](https://github.com/skyline69/spotix/releases/latest/download/spotix-amd64.deb)    |
-| Debian Package (arm64) | [Download](https://github.com/skyline69/spotix/releases/latest/download/spotix-arm64.deb)    |
-| macOS                  | [Download](https://github.com/skyline69/spotix/releases/latest/download/Spotix.dmg)          |
-| Windows                | [Download](https://github.com/skyline69/spotix/releases/latest/download/Spotix.exe)          |
+I will do this later, for now build it
 
 ## Build
 - Rust stable (1.65.0 or newer)
@@ -57,22 +47,22 @@ Grab the latest installers from the [Releases page](https://github.com/skyline69
 
 ### Install from source
 ```shell
-cargo install --locked --path spotix-gui
-# This installs the `spotix` binary to ~/.cargo/bin/.
+cargo install --locked --path qtspot-gui
+# This installs the `qtspot` binary to ~/.cargo/bin/.
 # On Linux, the app auto-installs its .desktop file and icons on first run,
 # so it will appear in your application launcher.
 # --locked ensures the pinned dependency versions are used.
 ```
 
 ### Optional Spotify Developer Client ID
-Spotix includes a default Spotify client ID, but heavy shared usage can trigger
+qtspot includes a default Spotify client ID, but heavy shared usage can trigger
 Spotify rate limits. If you see repeated 429 errors, create your own Spotify app:
 
 1. Open the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard).
 2. Create an app and enable Web API access.
 3. Add `http://127.0.0.1:8888/login` as a redirect URI.
 4. Copy the generated Client ID.
-5. In Spotix, open Settings -> Account and paste it into Spotify Developer Client ID.
+5. In qtspot, open Settings -> Account and paste it into Spotify Developer Client ID.
 6. Re-authenticate with Spotify.
 
 ### Build from source
@@ -83,7 +73,7 @@ cargo build
 
 ### Run from source
 ```shell
-cargo run --bin spotix
+cargo run -p qtspot-gui --bin qtspot
 # Add --release for release builds.
 ```
 
@@ -92,22 +82,13 @@ cargo run --bin spotix
 cargo install cargo-bundle
 cargo bundle --release
 ```
-## Cool Features compared to psst
+## Highlights
 
-### Equalizer with all the Spotify presets
-<img width="412" height="448" alt="image" src="https://github.com/user-attachments/assets/b0def49f-4b99-46fc-9fb1-20aea44cc913" />
 
-<img width="249" height="290" alt="image" src="https://github.com/user-attachments/assets/76202a2e-54bf-468d-b521-400b57d1bb34" />
 
-### Crossfade
-<img width="250" height="78" alt="image" src="https://github.com/user-attachments/assets/c523446e-81ba-4085-a852-33632111e339" />
+### Full Caching support!
 
-### Autoplay using Spotify's algorithm
-<img width="299" height="70" alt="image" src="https://github.com/user-attachments/assets/c294b1ac-222d-4e86-a772-4d41c4aa8a9c" />
 
-### Full Caching support for maximum performance!
-
-<img width="407" height="452" alt="image" src="https://github.com/user-attachments/assets/f6fce925-6a01-4a2e-9ef5-4135fc864771" />
 
 ### And some more
 - Up to date dependencies
@@ -117,21 +98,10 @@ cargo bundle --release
 ## Built-in Themes
 
 ### Gruvbox Dark
-<img width="938" height="501" alt="image" src="https://github.com/user-attachments/assets/d5ef9dff-8fe0-4450-90cf-2f63fa04a967" />
 
-### Dracula
-<img width="943" height="513" alt="image" src="https://github.com/user-attachments/assets/2979b8f8-04f1-437c-8610-62f315f1f0db" />
-
-### Kanagawa
-<img width="942" height="511" alt="image" src="https://github.com/user-attachments/assets/04bf1d41-fbd0-4960-80c6-8029f6296e64" />
-
-### Any many more!
-
-<img width="338" height="415" alt="image" src="https://github.com/user-attachments/assets/6e02bb5c-825a-4c0c-ae49-50c3335b9d53" />
 
 ## Theming
-- Place TOML theme files in `~/.config/Spotix/themes/`.
-- Spotix ships with multiple preset themes that auto-install into that folder on first run.
+
 - Each theme file must include a `name` field (e.g. `name = "catppuccin"`) and color keys. Example:
 ```toml
 name = "catppuccin"
@@ -169,13 +139,15 @@ status_text_color = "#bac2de"
 
 ## Project layout
 - `/spotix-core` core library (session, decoding, playback)
-- `/spotix-gui` Qt/QML GUI app — binary name: `spotix`
+- `/qtspot-gui` Qt/QML GUI app — binary name: `qtspot`
 
 ## Privacy
-Spotix connects only to official Spotify servers.
+qtspot connects only to official Spotify servers.
 Credentials are not stored; a reusable token is used instead.
 Cached data is stored locally and can be deleted at any time.
 
 ## Credits
+- Spotix: https://github.com/skyline69/spotix
+- psst: https://github.com/jpochyla/psst
 - librespot: https://github.com/librespot-org/librespot
 - ncspot: https://github.com/hrkfdn/ncspot

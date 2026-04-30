@@ -1,18 +1,18 @@
 [package]
-name = "spotix-gui"
+name = "qtspot-gui"
 version = "0.1.0"
-authors = ["skyline69"]
+authors = ["Cian Estella <cian@triarii.dev>", "YummierGravy"]
 edition = "2024"
 build = "build.rs"
 description = "Fast and native Spotify client"
-repository = "https://github.com/skyline69/spotix"
+repository = "https://github.com/YummierGravy/qtspot"
 
 [[bin]]
-name = "spotix"
+name = "qtspot"
 path = "src/bin/spotix.rs"
 
 [[bin]]
-name = "spotix-qt"
+name = "qtspot-qt"
 path = "src/bin/spotix-qt.rs"
 
 [features]
@@ -69,12 +69,12 @@ winres = { version = "0.1.12" }
 image = { version = "0.25.10" }
 
 [package.metadata.bundle]
-name = "Spotix"
-identifier = "com.skyline69.spotix"
+name = "qtspot"
+identifier = "com.yummiergravy.qtspot"
 icon = ["assets/logo.icns"]
 version = "0.1.0"
 resources = ["assets/fonts/spotify-mix"]
-copyright = "Copyright (c) skyline69 2024. All rights reserved."
+copyright = "Copyright (c) Cian Estella / YummierGravy 2026. All rights reserved."
 category = "Music"
 short_description = "Fast and native Spotify client"
 long_description = """

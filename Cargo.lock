@@ -3840,6 +3840,49 @@ dependencies = [
 ]
 
 [[package]]
+name = "qtspot-gui"
+version = "0.1.0"
+dependencies = [
+ "artem",
+ "async-trait",
+ "chrono",
+ "crossbeam-channel",
+ "cxx",
+ "cxx-qt",
+ "cxx-qt-build",
+ "cxx-qt-lib",
+ "directories",
+ "env_logger",
+ "im",
+ "image",
+ "infer",
+ "itertools",
+ "librespot-core",
+ "log",
+ "lru",
+ "maybe-async",
+ "open",
+ "parking_lot",
+ "platform-dirs",
+ "rand 0.10.0",
+ "regex",
+ "rspotify",
+ "rspotify-http",
+ "sanitize_html",
+ "serde",
+ "serde_json",
+ "spotix-core",
+ "threadpool",
+ "time 0.3.47",
+ "time-humanize",
+ "tokio",
+ "toml 1.0.6+spec-1.1.0",
+ "ureq 3.2.0",
+ "url",
+ "winres",
+]
+
+[[package]]
 name = "quick-error"
 version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4878,49 +4921,6 @@ dependencies = [
  "ureq 3.2.0",
  "url",
  "windows 0.62.2",
-]
-
-[[package]]
-name = "spotix-gui"
-version = "0.1.0"
-dependencies = [
- "artem",
- "async-trait",
- "chrono",
- "crossbeam-channel",
- "cxx",
- "cxx-qt",
- "cxx-qt-build",
- "cxx-qt-lib",
- "directories",
- "env_logger",
- "im",
- "image",
- "infer",
- "itertools",
- "librespot-core",
- "log",
- "lru",
- "maybe-async",
- "open",
- "parking_lot",
- "platform-dirs",
- "rand 0.10.0",
- "regex",
- "rspotify",
- "rspotify-http",
- "sanitize_html",
- "serde",
- "serde_json",
- "spotix-core",
- "threadpool",
- "time 0.3.47",
- "time-humanize",
- "tokio",
- "toml 1.0.6+spec-1.1.0",
- "ureq 3.2.0",
- "url",
- "winres",
 ]
 
 [[package]]

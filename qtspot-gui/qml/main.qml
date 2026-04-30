@@ -11,7 +11,7 @@ ApplicationWindow {
     minimumWidth: 900
     minimumHeight: 560
     visible: true
-    title: "Spotix Qt"
+    title: "qtspot"
     color: terminalBg
 
     readonly property SpotixApp spotix: SpotixApp {}
