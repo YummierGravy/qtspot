@@ -1496,7 +1496,19 @@ fn push_tree_route_with_image(
 }
 
 fn immediate_nav_document(target: &QtNavTarget, app: &qobject::SpotixApp) -> Option<QtNavDocument> {
-    let title = target.title();
+    let show_collection_logo = matches!(
+        target,
+        QtNavTarget::Library
+            | QtNavTarget::Playlists
+            | QtNavTarget::SavedAlbums
+            | QtNavTarget::Artists
+            | QtNavTarget::Shows
+    );
+    let title = if show_collection_logo {
+        String::new()
+    } else {
+        target.title()
+    };
     let status = match target {
         QtNavTarget::Home => String::new(),
         QtNavTarget::Login => app.login_status().to_string(),
@@ -1505,7 +1517,7 @@ fn immediate_nav_document(target: &QtNavTarget, app: &qobject::SpotixApp) -> Opt
         | QtNavTarget::Playlists
         | QtNavTarget::SavedAlbums
         | QtNavTarget::Artists
-        | QtNavTarget::Shows => app.library_status().to_string(),
+        | QtNavTarget::Shows => String::new(),
         QtNavTarget::Search => app.search_status().to_string(),
         QtNavTarget::Lyrics => "Lyrics view is still parity work.".to_string(),
         QtNavTarget::Playlist { .. }
@@ -1526,7 +1538,11 @@ fn immediate_nav_document(target: &QtNavTarget, app: &qobject::SpotixApp) -> Opt
     Some(QtNavDocument {
         title,
         status,
-        route_art_ascii: String::new(),
+        route_art_ascii: if show_collection_logo {
+            ascii_art_logo().to_string()
+        } else {
+            String::new()
+        },
         rows,
     })
 }
@@ -2106,56 +2122,34 @@ fn colored_album_art_to_ascii(url: &str, width: u32, height: u32) -> Result<Stri
     Ok(output)
 }
 
+fn ascii_art_logo() -> &'static str {
+    static LOGO_ASCII: OnceLock<String> = OnceLock::new();
+    LOGO_ASCII.get_or_init(render_logo_ascii_art)
+}
+
+fn render_logo_ascii_art() -> String {
+    let image = match image::load_from_memory(include_bytes!("../../assets/logo_128.png")) {
+        Ok(image) => image,
+        Err(err) => return ascii_art_error(&format!("logo unavailable: {err}")),
+    };
+    let config = AsciiConfigBuilder::new()
+        .target(TargetType::HtmlFile)
+        .dimension(ResizingDimension::Width)
+        .target_size(NonZeroU32::new(52).expect("non-zero logo ASCII width"))
+        .scale(0.42)
+        .color(true)
+        .background_color(false)
+        .characters("MWNXK0Okxdolc:;,'...   ".to_string())
+        .build();
+    extract_artem_pre(&artem::convert(image, &config))
+}
+
 fn ascii_art_placeholder() -> &'static str {
-    "<pre style=\"color:#00ff87\">\
-   ............................................   \n\
-   ...............:-=++++++++=-:...............   \n\
-   ............:=++++++++++++++++=:............   \n\
-   ..........-++++=-:........:-=++++-..........   \n\
-   ........=+++=:................:=+++=........   \n\
-   ......:+++=......................=+++:......   \n\
-   .....=+++.........:------:.........+++=.....   \n\
-   ....=++=........./  QTSPOT \\........=++=....   \n\
-   ...:+++:.........\\  MUSIC  /........:+++:...   \n\
-   ...=++=...........:------:..........=++=...   \n\
-   ...=++=.............................=++=...   \n\
-   ...:+++:...........................:+++:...   \n\
-   ....=++=.........................=++=....   \n\
-   .....=+++.......................+++=.....   \n\
-   ......:+++=...................=+++:......   \n\
-   ........=+++=:.............:=+++=........   \n\
-   ..........-++++=-:.....:-=++++-..........   \n\
-   ............:=++++++++++++++++=:............   \n\
-   ...............:-=++++++++=-:...............   \n\
-   ............................................   \n\
-   ................ select a track .............   \n\
-   ............................................   </pre>"
+    ascii_art_logo()
 }
 
 fn ascii_art_loading() -> &'static str {
-    "<pre style=\"color:#3daee9\">\
-   ............................................   \n\
-   ...............:-=++++++++=-:...............   \n\
-   ............:=++++++++++++++++=:............   \n\
-   ..........-++++=-:........:-=++++-..........   \n\
-   ........=+++=:................:=+++=........   \n\
-   ......:+++=......................=+++:......   \n\
-   .....=+++..........................+++=.....   \n\
-   ....=++=......... loading art ......=++=....   \n\
-   ...:+++:..........................:+++:...   \n\
-   ...=++=..........[======>---]......=++=...   \n\
-   ...=++=...........................=++=...   \n\
-   ...:+++:..........................:+++:...   \n\
-   ....=++=.........................=++=....   \n\
-   .....=+++.......................+++=.....   \n\
-   ......:+++=...................=+++:......   \n\
-   ........=+++=:.............:=+++=........   \n\
-   ..........-++++=-:.....:-=++++-..........   \n\
-   ............:=++++++++++++++++=:............   \n\
-   ...............:-=++++++++=-:...............   \n\
-   ............................................   \n\
-   ............................................   \n\
-   ............................................   </pre>"
+    ascii_art_logo()
 }
 
 fn ascii_art_error(err: &str) -> String {

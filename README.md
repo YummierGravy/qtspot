@@ -9,6 +9,9 @@
   </p>
 </div>
 
+<p align="center">
+  <img src="assets/Screenshot.jpg" alt="qtspot desktop player screenshot" width="960" />
+</p>
 
 ## Maintainer and lineage
 - qtspot is maintained by Cian Estella / YummierGravy.

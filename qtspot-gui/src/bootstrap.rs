@@ -12,7 +12,7 @@ pub const ENV_LOG_STYLE: &str = "QTSPOT_LOG_STYLE";
 pub fn init_logging() {
     Builder::from_env(
         Env::new()
-            .filter_or(ENV_LOG, "info")
+            .filter_or(ENV_LOG, "info,rspotify_http=warn")
             .write_style(ENV_LOG_STYLE),
     )
     .init();

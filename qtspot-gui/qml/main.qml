@@ -60,6 +60,16 @@ ApplicationWindow {
         }
     }
 
+    function showRouteLogoInMainPane() {
+        return root.spotix.active_route_art_ascii.length > 0
+            && root.spotix.active_route_title.length === 0
+            && root.spotix.detail_status.length === 0
+    }
+
+    function routeArtInHeader() {
+        return root.spotix.active_route_art_ascii.length > 0 && !root.showRouteLogoInMainPane()
+    }
+
     function currentTreeItem() {
         var items = treeList.model
         if (treeList.currentIndex < 0 || treeList.currentIndex >= items.length) {
@@ -755,12 +765,14 @@ ApplicationWindow {
 
                         RowLayout {
                             Layout.fillWidth: true
-                            Layout.preferredHeight: 82
-                            spacing: 8
+                            Layout.preferredHeight: root.showRouteLogoInMainPane() ? 0 : (root.routeArtInHeader() ? 54 : 34)
+                            visible: !root.showRouteLogoInMainPane()
+                            spacing: root.routeArtInHeader() ? 4 : 8
 
                             Label {
                                 Layout.fillWidth: true
                                 Layout.alignment: Qt.AlignVCenter
+                                visible: root.spotix.active_route_title.length > 0
                                 text: root.spotix.active_route_title
                                 color: accent
                                 font.family: "monospace"
@@ -770,22 +782,23 @@ ApplicationWindow {
                             }
 
                             Label {
-                                Layout.preferredWidth: 165
-                                Layout.preferredHeight: 82
+                                Layout.preferredWidth: root.routeArtInHeader() ? 112 : 165
+                                Layout.preferredHeight: root.routeArtInHeader() ? 54 : 34
                                 clip: true
-                                text: root.spotix.active_route_art_ascii.length > 0 ? root.spotix.active_route_art_ascii : (root.spotix.authenticated ? "ONLINE" : "LOGIN")
-                                textFormat: root.spotix.active_route_art_ascii.length > 0 ? Text.RichText : Text.PlainText
+                                text: root.routeArtInHeader() ? root.spotix.active_route_art_ascii : (root.spotix.authenticated ? "ONLINE" : "LOGIN")
+                                textFormat: root.routeArtInHeader() ? Text.RichText : Text.PlainText
                                 color: root.spotix.authenticated ? accent : warn
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                                 font.family: "monospace"
-                                font.pixelSize: root.spotix.active_route_art_ascii.length > 0 ? 7 : 13
+                                font.pixelSize: root.routeArtInHeader() ? 5 : 13
                             }
                         }
 
                         Label {
                             Layout.fillWidth: true
                             Layout.maximumHeight: 32
+                            visible: root.spotix.detail_status.length > 0
                             text: root.spotix.detail_status
                             color: dimText
                             wrapMode: Text.WordWrap
@@ -870,81 +883,102 @@ ApplicationWindow {
                             color: borderColor
                         }
 
-                        ListView {
-                            id: detailList
-                            property var appRoot: root
+                        Item {
                             Layout.fillWidth: true
                             Layout.fillHeight: true
-                            clip: true
-                            currentIndex: 0
-                            model: root.parseArray(root.spotix.detail_rows_json)
-                            boundsBehavior: Flickable.StopAtBounds
 
-                            delegate: Rectangle {
-                                id: detailDelegate
-                                property var view: ListView.view
-                                property var appRoot: view.appRoot
-                                width: view.width
-                                height: rowHeight
-                                color: ListView.isCurrentItem && appRoot.activePane === "detail" ? selection : "transparent"
+                            Label {
+                                anchors.centerIn: parent
+                                width: Math.min(parent.width - 24, 250)
+                                height: Math.min(parent.height - 24, 180)
+                                visible: root.showRouteLogoInMainPane()
+                                text: root.spotix.active_route_art_ascii
+                                textFormat: Text.RichText
+                                color: accent
+                                font.family: "monospace"
+                                font.pixelSize: 8
+                                lineHeight: 0.95
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                                clip: true
+                            }
 
-                                RowLayout {
-                                    anchors.fill: parent
-                                    anchors.leftMargin: 2
-                                    anchors.rightMargin: 6
-                                    spacing: 2
+                            ListView {
+                                id: detailList
+                                property var appRoot: root
+                                anchors.fill: parent
+                                visible: !root.showRouteLogoInMainPane()
+                                clip: true
+                                currentIndex: 0
+                                model: root.parseArray(root.spotix.detail_rows_json)
+                                boundsBehavior: Flickable.StopAtBounds
 
-                                    Label {
-                                        Layout.preferredWidth: 10
-                                        text: detailDelegate.appRoot.isNowPlayingRow(modelData) ? detailDelegate.appRoot.playingGlyph() : ""
-                                        color: accent
-                                        horizontalAlignment: Text.AlignHCenter
-                                        font.family: "monospace"
-                                        font.pixelSize: 14
-                                        font.bold: true
-                                    }
+                                delegate: Rectangle {
+                                    id: detailDelegate
+                                    property var view: ListView.view
+                                    property var appRoot: view.appRoot
+                                    width: view.width
+                                    height: rowHeight
+                                    color: ListView.isCurrentItem && appRoot.activePane === "detail" ? selection : "transparent"
 
-                                    Label {
-                                        Layout.preferredWidth: 30
-                                        Layout.preferredHeight: parent.height
-                                        visible: detailDelegate.appRoot.shouldShowCoverAscii(modelData)
-                                        text: detailDelegate.appRoot.coverAscii(modelData)
-                                        textFormat: Text.RichText
-                                        horizontalAlignment: Text.AlignLeft
-                                        verticalAlignment: Text.AlignVCenter
-                                        font.family: "monospace"
-                                        font.pixelSize: 6
-                                        font.bold: true
-                                    }
+                                    RowLayout {
+                                        anchors.fill: parent
+                                        anchors.leftMargin: 2
+                                        anchors.rightMargin: 6
+                                        spacing: 2
 
-                                    Label {
-                                        Layout.fillWidth: true
-                                        text: modelData.label
-                                        color: detailDelegate.appRoot.isNowPlayingRow(modelData) || ListView.isCurrentItem ? accent : textColor
-                                        elide: Text.ElideRight
-                                        font.family: "monospace"
-                                        font.pixelSize: 14
-                                    }
-
-                                    Label {
-                                        Layout.preferredWidth: 260
-                                        text: modelData.meta
-                                        color: dimText
-                                        elide: Text.ElideRight
-                                        font.family: "monospace"
-                                        font.pixelSize: 12
-                                    }
-                                }
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        detailDelegate.appRoot.activePane = "detail"
-                                        detailDelegate.view.currentIndex = index
-                                        if (modelData.playable || modelData.kind === "action" || modelData.kind === "album" || modelData.kind === "artist" || modelData.kind === "playlist" || modelData.kind === "show") {
-                                            detailDelegate.appRoot.spotix.activateDetailRow(modelData.id)
+                                        Label {
+                                            Layout.preferredWidth: 10
+                                            text: detailDelegate.appRoot.isNowPlayingRow(modelData) ? detailDelegate.appRoot.playingGlyph() : ""
+                                            color: accent
+                                            horizontalAlignment: Text.AlignHCenter
+                                            font.family: "monospace"
+                                            font.pixelSize: 14
+                                            font.bold: true
                                         }
-                                        detailDelegate.appRoot.refocusKeyboard()
+
+                                        Label {
+                                            Layout.preferredWidth: 30
+                                            Layout.preferredHeight: parent.height
+                                            visible: detailDelegate.appRoot.shouldShowCoverAscii(modelData)
+                                            text: detailDelegate.appRoot.coverAscii(modelData)
+                                            textFormat: Text.RichText
+                                            horizontalAlignment: Text.AlignLeft
+                                            verticalAlignment: Text.AlignVCenter
+                                            font.family: "monospace"
+                                            font.pixelSize: 6
+                                            font.bold: true
+                                        }
+
+                                        Label {
+                                            Layout.fillWidth: true
+                                            text: modelData.label
+                                            color: detailDelegate.appRoot.isNowPlayingRow(modelData) || ListView.isCurrentItem ? accent : textColor
+                                            elide: Text.ElideRight
+                                            font.family: "monospace"
+                                            font.pixelSize: 14
+                                        }
+
+                                        Label {
+                                            Layout.preferredWidth: 260
+                                            text: modelData.meta
+                                            color: dimText
+                                            elide: Text.ElideRight
+                                            font.family: "monospace"
+                                            font.pixelSize: 12
+                                        }
+                                    }
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: {
+                                            detailDelegate.appRoot.activePane = "detail"
+                                            detailDelegate.view.currentIndex = index
+                                            if (modelData.playable || modelData.kind === "action" || modelData.kind === "album" || modelData.kind === "artist" || modelData.kind === "playlist" || modelData.kind === "show") {
+                                                detailDelegate.appRoot.spotix.activateDetailRow(modelData.id)
+                                            }
+                                            detailDelegate.appRoot.refocusKeyboard()
+                                        }
                                     }
                                 }
                             }
